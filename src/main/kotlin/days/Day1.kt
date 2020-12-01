@@ -3,15 +3,24 @@ package days
 class Day1 : Day(1) {
 
     override fun partOne(): Any {
-        return inputList.take(2)
-            .map { it.toUpperCase() }
-            .joinToString(" ")
+        val input = inputList.map { it.toInt() }
+        for (i in input) {
+            for (j in input) {
+                if (i + j == 2020) return i * j
+            }
+        }
+        return "no pair matched"
     }
 
     override fun partTwo(): Any {
-        return inputString.split("\n")
-            .filterNot { it.isEmpty() }
-            .map { it.toUpperCase() }
-            .last()
+        val input = inputList.map { it.toInt() }
+        for (i in input) {
+            for (j in input) {
+                for (k in input) {
+                    if (i + j + k == 2020) return i * j * k
+                }
+            }
+        }
+        return "no pair matched"
     }
 }

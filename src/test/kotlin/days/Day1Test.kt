@@ -12,14 +12,11 @@ class Day1Test {
 
     @Test
     fun testPartOne() {
-        assertThat(dayOne.partOne(), `is`("THIS IS"))
+        assertThat(dayOne.partOne(), `is`(514579))
     }
 
     @Test
     fun testPartTwo() {
-        val partTwo = dayOne.partTwo()
-        assertThat(partTwo, notNullValue())
-        assertThat(partTwo, instanceOf(String::class.java))
-        assertThat(partTwo, `is`("FILE"))
+        assertThat(dayOne.partTwo(), `is`(241861950))
     }
 }
