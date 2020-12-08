@@ -4,37 +4,15 @@ class Day7 : Day(7) {
 
     override fun partOne(): Any {
         val bags = inputList.map { parseRule(it) }.toMap()
-        return bags.count { containsBag(it.value, bags) }
+        return bags.count { containsBag(it.value.keys.toList(), bags) }
     }
 
     override fun partTwo(): Any {
-        val bags = inputList.map { parseRuleTwo(it) }.toMap()
-        var sum = 0
-//        for (b in bags.values) {
-//            sum += containsBagTwo(b, bags)
-//        }
-        return sum
+        val bags = inputList.map { parseRule(it) }.toMap()
+        return countBags(bags["shiny gold"], bags)
     }
 
-    private fun parseRule(input: String): Pair<String, List<String>> {
-        val color = input.substringBefore(" bags")
-        var bags = emptyList<String>()
-
-        if (input.substringAfter("contain ") != "no other bags.") {
-            bags = input.substringAfter("contain ").split(", ").map {
-                it.substringAfter(" ").substringBefore(" bag")
-            }
-        }
-        return Pair(color, bags)
-    }
-
-    private fun containsBag(values: List<String>?, bags: Map<String, List<String>>): Boolean {
-        val bag = "shiny gold"
-        if (values.isNullOrEmpty()) return false
-        return values.contains(bag) || values.any { containsBag(bags[it], bags) }
-    }
-
-    private fun parseRuleTwo(input: String): Pair<String, Map<String, Int>> {
+    private fun parseRule(input: String): Pair<String, Map<String, Int>> {
         val color = input.substringBefore(" bags")
         var bags = emptyMap<String, Int>()
 
@@ -46,17 +24,17 @@ class Day7 : Day(7) {
         return Pair(color, bags)
     }
 
-    private fun containsBagTwo(values: Map<String,Map<String, Int>>?, bags: Map<String, Map<String, Int>>): Int {
+    private fun containsBag(values: List<String>?, bags: Map<String, Map<String, Int>>): Boolean {
         val bag = "shiny gold"
-        if (values.isNullOrEmpty()) return 0
-        // if (values.contains(bag)) println("key: $key values: $values is true")
+        if (values.isNullOrEmpty()) return false
+        return values.contains(bag) || values.any { containsBag(bags[it]!!.keys.toList(), bags) }
+    }
 
-        // TODO
-//        if (values.contains(bag)) {
-//            return values.count()
-//        } else {
-//            return values.values.sumOf { containsBagTwo(bags[it], bags) }
-//        }
-        return 0
+    private fun countBags(values: Map<String, Int>?, bags: Map<String, Map<String, Int>>): Int {
+        return if (values.isNullOrEmpty()) {
+            0
+        } else {
+            values.map { it.value + it.value * countBags(bags[it.key], bags) }.sum()
+        }
     }
 }

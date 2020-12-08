@@ -15,6 +15,6 @@ class Day7Test {
 
     @Test
     fun testPartTwo() {
-        MatcherAssert.assertThat(day.partTwo(), Is.`is`(4))
+        MatcherAssert.assertThat(day.partTwo(), Is.`is`(126))
     }
 }
