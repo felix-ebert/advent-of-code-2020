@@ -12,7 +12,27 @@ class Day10 : Day(10) {
     }
 
     override fun partTwo(): Any {
-        return 0
+        val adapters = inputList
+            .map { it.toInt() }
+            .toMutableSet()
+            .apply {
+                add(0)
+                add(maxOrNull()!! + 3) // add device's built-in adapter
+            }
+            .sorted()
+
+        val arrangements = LongArray(adapters.last() + 1)
+        arrangements[0] = 1
+
+        for (adapter in adapters) {
+            for (diff in 1..3) {
+                val next = adapter + diff
+                if (adapters.contains(next))
+                    arrangements[next] += arrangements[adapter]
+            }
+        }
+
+        return arrangements[adapters.last()]
     }
 
     private fun getAdapterChain(adapters: Set<Int>): Int {
