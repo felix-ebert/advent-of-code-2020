@@ -12,25 +12,53 @@ class Day14 : Day(14) {
             if (line.startsWith("mask"))
                 mask = line.substringAfterLast(" ")
             else {
-                memory[line.substringAfter("[").substringBefore("]")] =
-                    overrideWithMask(line.substringAfterLast(" "), mask)
+                val value = line.substringAfterLast(" ")
+                val binaryValue = Integer.toBinaryString(value.toInt()).padStart(36, '0').toMutableList()
+                val address = line.substringAfter("[").substringBefore("]")
+
+                for (bit in mask.indices) {
+                    if (mask[bit] != 'X') binaryValue[bit] = mask[bit]
+                }
+
+                memory[address] = binaryValue.joinToString("")
             }
         }
 
         return memory.values.sumOf { BigInteger(it, 2) }
     }
 
-    private fun overrideWithMask(value: String, mask: String): String {
-        val binaryValue = Integer.toBinaryString(value.toInt()).padStart(36, '0').toMutableList()
+    override fun partTwo(): Any {
+        val memory = mutableMapOf<String, String>()
+        var mask = ""
 
-        for (bit in mask.indices) {
-            if (mask[bit] != 'X') binaryValue[bit] = mask[bit]
+        for (line in inputList) {
+            if (line.startsWith("mask"))
+                mask = line.substringAfterLast(" ")
+            else {
+                val value = line.substringAfterLast(" ")
+                val address = line.substringAfter("[").substringBefore("]")
+                val binaryAddress = Integer.toBinaryString(address.toInt()).padStart(36, '0').toMutableList()
+
+                for (bit in mask.indices) {
+                    if (mask[bit] != '0') binaryAddress[bit] = mask[bit]
+                }
+
+                getFloatingAddresses(binaryAddress.joinToString(""), mutableListOf()).forEach {
+                    memory[it] = value
+                }
+            }
         }
 
-        return binaryValue.joinToString("")
+        return memory.values.sumOf { it.toBigInteger() }
     }
 
-    override fun partTwo(): Any {
-        return 0
+    private fun getFloatingAddresses(address: String, addresses: MutableList<String>): MutableList<String> {
+        if (address.contains('X')) {
+            getFloatingAddresses(address.replaceFirst('X', '0'), addresses)
+            getFloatingAddresses(address.replaceFirst('X', '1'), addresses)
+        } else {
+            addresses.add(address)
+        }
+        return addresses
     }
 }

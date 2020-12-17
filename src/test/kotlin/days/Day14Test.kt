@@ -3,6 +3,7 @@ package days
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.Is
 import org.junit.Test
+import java.math.BigInteger
 
 class Day14Test {
 
@@ -11,5 +12,10 @@ class Day14Test {
     @Test
     fun testPartOne() {
         MatcherAssert.assertThat(day.partOne(), Is.`is`(165))
+    }
+
+    @Test
+    fun testPartTwo() {
+        MatcherAssert.assertThat(day.partTwo(), Is.`is`(BigInteger.valueOf(208)))
     }
 }
