@@ -12,4 +12,9 @@ class Day18Test {
     fun testPartOne() {
         MatcherAssert.assertThat(day.partOne(), Is.`is`(122L))
     }
+
+    @Test
+    fun testPartTwo() {
+        MatcherAssert.assertThat(day.partTwo(), Is.`is`(282L))
+    }
 }
